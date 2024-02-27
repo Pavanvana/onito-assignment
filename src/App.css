@@ -4,6 +4,8 @@
 
 .App {
   margin: 0px;
+  font: 90% / 1.45em "Helvetica Neue", HelveticaNeue, Helvetica, Arial,
+    sans-serif !important;
 }
 * {
   margin: 0px;

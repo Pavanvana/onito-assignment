@@ -1,55 +1,69 @@
 import React, { useEffect } from "react";
-import { useSelector } from "react-redux";
 import $ from "jquery";
-import DataTable from "datatables.net";
-import { RootState } from "../../redux";
+import "datatables.net";
 
-// import "datatables.net-dt/css/jquery.dataTables.css";
+import { useCustomT } from "../../hooks/useCustomT";
+import { tableHeaders } from "../../constants/tableConstants";
+
+import "datatables.net-bs5/css/dataTables.bootstrap5.min.css";
+import "./index.css";
+
+interface RegistrationsDataType {
+  name: string;
+  age: number;
+  sex: string;
+  mobile: string;
+  govtIdType: string;
+  govtId: string;
+  address: string;
+  country: string;
+  state: string;
+  city: string;
+  pincode: string;
+}
 
 const UserTable: React.FC = (): React.ReactElement => {
-  const registrationData = useSelector(
-    (state: RootState) => state.registrationData
-  );
+  const t = useCustomT("dataTablesHeading");
+  const registrationData = localStorage.getItem("registrationData");
+  const data: RegistrationsDataType[] =
+    registrationData && JSON.parse(registrationData);
 
   useEffect(() => {
     $("#dataTable").DataTable();
   }, []);
 
   return (
-    <table id="dataTable">
-      <thead>
-        <tr>
-          <th>Name</th>
-          <th>Age</th>
-          <th>Sex</th>
-          <th>Mobile</th>
-          <th>Govt ID Type</th>
-          <th>Govt ID</th>
-          <th>Address</th>
-          <th>Country</th>
-          <th>State</th>
-          <th>City</th>
-          <th>Pincode</th>
-        </tr>
-      </thead>
-      <tbody>
-        {registrationData.stepOneData && registrationData.stepTwoData && (
+    <div className="overflow-auto">
+      <h2 className="text-2xl font-bold font-sans text-center">
+        {t("heading")}
+      </h2>
+      <table id="dataTable" className="!w-full overflow-auto">
+        <thead>
           <tr>
-            <td>{registrationData.stepOneData.name}</td>
-            <td>{registrationData.stepOneData.age}</td>
-            <td>{registrationData.stepOneData.sex}</td>
-            <td>{registrationData.stepOneData.mobile}</td>
-            <td>{registrationData.stepOneData.govtIdType}</td>
-            <td>{registrationData.stepOneData.govtId}</td>
-            <td>{registrationData.stepTwoData.address}</td>
-            <td>{registrationData.stepTwoData.country}</td>
-            <td>{registrationData.stepTwoData.state}</td>
-            <td>{registrationData.stepTwoData.city}</td>
-            <td>{registrationData.stepTwoData.pincode}</td>
+            {tableHeaders.map((header) => (
+              <th>{header}</th>
+            ))}
           </tr>
-        )}
-      </tbody>
-    </table>
+        </thead>
+        <tbody>
+          {data.map((user) => (
+            <tr>
+              <td>{user.name}</td>
+              <td>{user.age}</td>
+              <td>{user.sex}</td>
+              <td>{user.mobile}</td>
+              <td>{user.govtIdType}</td>
+              <td>{user.govtId}</td>
+              <td>{user.address}</td>
+              <td>{user.country}</td>
+              <td>{user.state}</td>
+              <td>{user.city}</td>
+              <td>{user.pincode}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
   );
 };
 

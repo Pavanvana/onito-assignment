@@ -21,6 +21,7 @@
     "classnames": "^2.5.1",
     "cookies-ts": "1.0.5",
     "datatables.net": "^2.0.0",
+    "datatables.net-bs5": "^2.0.0",
     "datatables.net-dt": "^2.0.0",
     "date-fns": "2.30.0",
     "i18next": "23.5.1",
