@@ -8,6 +8,7 @@ import Autocomplete from "@mui/material/Autocomplete";
 
 import { secondStepSchema } from "../../validations/registrationFormValidations";
 import getCountriesList from "../../controllers/apis/getCountriesAPI";
+import { useCustomT } from "../../hooks/useCustomT";
 
 import {
   errorMsgClass,
@@ -36,6 +37,8 @@ const SecondStepRegistration = (props: Props): React.ReactElement => {
     defaultValues: stepTwoData || undefined,
   });
 
+  const t = useCustomT("secondStepRegistration");
+
   useMemo(async () => {
     const countriesList = await getCountriesList();
     setCountryList(countriesList);
@@ -48,9 +51,9 @@ const SecondStepRegistration = (props: Props): React.ReactElement => {
   const renderFooter = (): React.ReactElement => (
     <Grid className="flex items-center justify-between mx-[20px] mb-[20px]">
       <Button type="button" onClick={onClickBack}>
-        Back
+        {t("back")}
       </Button>
-      <Button type="submit">Submit</Button>
+      <Button type="submit">{t("submit")}</Button>
     </Grid>
   );
 
@@ -59,7 +62,7 @@ const SecondStepRegistration = (props: Props): React.ReactElement => {
       <Grid className={fieldContainerClass}>
         <TextField
           variant="outlined"
-          label="Address"
+          label={t("address")}
           {...register("address")}
         />
         <span className={errorMsgClass}>
@@ -76,7 +79,7 @@ const SecondStepRegistration = (props: Props): React.ReactElement => {
             <TextField
               variant="outlined"
               {...params}
-              label="Country"
+              label={t("country")}
               {...register("country")}
             />
           )}
@@ -86,9 +89,13 @@ const SecondStepRegistration = (props: Props): React.ReactElement => {
         </span>
       </Grid>
       <Grid className={fieldContainerClass}>
-        <TextField variant="outlined" label="City" {...register("city")} />
+        <TextField
+          variant="outlined"
+          label={t("state")}
+          {...register("state")}
+        />
         <span className={errorMsgClass}>
-          {errors.city && errors.city.message}
+          {errors.state && errors.state.message}
         </span>
       </Grid>
     </Grid>
@@ -97,15 +104,15 @@ const SecondStepRegistration = (props: Props): React.ReactElement => {
   const renderBottomFields = (): React.ReactElement => (
     <Grid className="flex items-center max-[900px]:flex-col">
       <Grid className={fieldContainerClass}>
-        <TextField variant="outlined" label="State" {...register("state")} />
+        <TextField variant="outlined" label={t("city")} {...register("city")} />
         <span className={errorMsgClass}>
-          {errors.state && errors.state.message}
+          {errors.city && errors.city.message}
         </span>
       </Grid>
       <Grid className={fieldContainerClass}>
         <TextField
           variant="outlined"
-          label="Pincode"
+          label={t("pincode")}
           {...register("pincode")}
         />
         <span className={errorMsgClass}>
@@ -116,7 +123,7 @@ const SecondStepRegistration = (props: Props): React.ReactElement => {
   );
   return (
     <Grid>
-      <h2 className={secondStepHeadingClass}>Second Step</h2>
+      <h2 className={secondStepHeadingClass}>{t("secondStepHeading")}</h2>
       <form onSubmit={handleSubmit(handleFormSubmit)} className="flex flex-col">
         {renderTopFields()}
         {renderBottomFields()}

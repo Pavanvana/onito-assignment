@@ -2,10 +2,11 @@ import React, { useState } from "react";
 import { registrationFormType } from "../../types/registrationFormType";
 import { Grid, Paper } from "@material-ui/core";
 import { SuccessToast, WarningToast } from "../../utils/toastUtils";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import {
   addStepOneData,
   addStepTwoData,
+  RootState,
   StepOneData,
   StepTwoData,
 } from "../../redux";
@@ -18,11 +19,13 @@ import { gridContainerClass, paperContainerClass } from "./styles";
 
 const RegistrationStepsController = (): React.ReactElement => {
   const dispatch = useDispatch();
-  //   const userData = useSelector((state: RootState) => state.registrationData);
-  const [registrationStep, setRegistrationStep] = useState(
-    registrationFormType.FIRST_STEP
+  const [registrationStep, setRegistrationStep] =
+    useState<registrationFormType>(registrationFormType.FIRST_STEP);
+  const [activeStep, setActiveStep] = React.useState<number>(0);
+
+  const registrationData = useSelector(
+    (state: RootState) => state.registrationData
   );
-  const [activeStep, setActiveStep] = React.useState(0);
 
   const onClickNext = (data: StepOneData): void => {
     dispatch(addStepOneData(data));
@@ -32,11 +35,27 @@ const RegistrationStepsController = (): React.ReactElement => {
   };
 
   const onClickSubmit = (data: StepTwoData): void => {
+    const newData = {
+      ...registrationData.stepOneData,
+      ...data,
+    };
+    const previousData = localStorage.getItem("registrationData");
+    let parsedData;
+    if (previousData) {
+      parsedData = JSON.parse(previousData);
+      localStorage.setItem(
+        "registrationData",
+        JSON.stringify([newData, ...parsedData])
+      );
+    } else {
+      localStorage.setItem("registrationData", JSON.stringify([newData]));
+    }
     dispatch(addStepTwoData(data));
     setActiveStep((prevActiveStep) => prevActiveStep + 1);
     SuccessToast("Second Step Validation Completed Successfully");
     setRegistrationStep(registrationFormType.REGISTRATION_SUCCESS);
   };
+
   const renderRegistrationForm = (): React.ReactElement => {
     switch (registrationStep) {
       case registrationFormType.FIRST_STEP:
@@ -60,7 +79,9 @@ const RegistrationStepsController = (): React.ReactElement => {
   return (
     <Grid className={gridContainerClass}>
       <Paper elevation={10} className={paperContainerClass}>
-        <HorizontalLinearStepper activeStep={activeStep} />
+        {registrationStep !== registrationFormType.REGISTRATION_SUCCESS && (
+          <HorizontalLinearStepper activeStep={activeStep} />
+        )}
         {renderRegistrationForm()}
       </Paper>
     </Grid>
