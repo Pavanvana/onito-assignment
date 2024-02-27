@@ -7,7 +7,7 @@ import { TextField, Button, Grid } from "@material-ui/core";
 import Autocomplete from "@mui/material/Autocomplete";
 
 import { secondStepSchema } from "../../validations/registrationFormValidations";
-import getCountriesList from "../../controllers/apis/getCountriesAPI";
+import getCountriesList from "../../apis/getCountriesAPI";
 import { useCustomT } from "../../hooks/useCustomT";
 
 import {
